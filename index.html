@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>テロップチェッカー</title>
+<style>
+  body { font-family: -apple-system, "Hiragino Sans", sans-serif; background: #fdf7f7; color: #333; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 16px; text-align: center; }
+  p { line-height: 1.8; }
+  a { color: #b4424b; }
+</style>
+</head>
+<body>
+<div>
+  <p id="msg">テロップチェッカーを開いています…</p>
+</div>
+<script>
+  // url.txt に書かれた最新の行き先へ移る。ブラウザの控えを使わないよう、毎回取り直す。
+  fetch("url.txt?t=" + Date.now(), { cache: "no-store" })
+    .then(function (r) { if (!r.ok) throw new Error(); return r.text(); })
+    .then(function (t) {
+      var u = t.trim();
+      if (!/^https:\/\/[a-z0-9-]+\.trycloudflare\.com$/.test(u)) throw new Error();
+      location.replace(u + "/");
+    })
+    .catch(function () {
+      document.getElementById("msg").textContent = "いまは開けません。1〜2分おいてから、このページを開き直してください。";
+    });
+</script>
+</body>
+</html>
